@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
+use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
+
 
 class AdminController extends Controller
 {
@@ -11,7 +14,8 @@ class AdminController extends Controller
      */
     public function index()
     {
-        //
+        $admins = Admin::all();
+        return view('admin.index', compact('admins'));
     }
 
     /**
@@ -19,7 +23,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.create');
     }
 
     /**
@@ -27,7 +31,22 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'nama' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'lokasi' => 'required|string|max:255',
+            'kategori' => 'required|string|max:255',
+            'gambar' => 'nullable|image|max:2048',
+            'status' => 'required|string|max:50',
+        ]);
+
+        if ($request->hasFile('gambar')) {
+            $path = $request->file('gambar')->store('images', 'public');
+            $validatedData['gambar'] = $path;
+        }
+
+
+        return redirect()->route('admin.index')->with('success', 'Data berhasil disimpan.');
     }
 
     /**
@@ -35,7 +54,7 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
