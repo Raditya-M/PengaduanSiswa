@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReporterController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,10 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('admin', AdminController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('siswa', ReporterController::class);
 });
 
 require __DIR__.'/auth.php';
